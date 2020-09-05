@@ -28,7 +28,10 @@ export default function User() {
 
   function handleSubmit(data) {
     async function saveUser() {
-      const response = await api.post(`/users/${id}`);
+      const response = await api.put(`/users/${id}`, { body: data });
+
+      console.log(response);
+
       setUser(response.data);
     }
     saveUser();
