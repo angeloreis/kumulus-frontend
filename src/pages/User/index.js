@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { Link } from 'react-router-dom';
 import { Form } from '@unform/web';
@@ -13,35 +14,51 @@ import { HeaderUser, FooterUser, SubmitButton, UserForm } from './styles';
 
 export default function User() {
   const [user, setUser] = useState([]);
+  const [status, setStatus] = useState([]);
+
+  function showToastStatus(code) {
+    switch (code) {
+      case '200':
+        toast.done(`<p>Status: ${code}</p>Requisição realizada com sucesso!`);
+        return;
+      case '404':
+        toast.error('Falha na requisição! Tenta mais tarde!');
+        return;
+      default:
+        break;
+    }
+  }
 
   const params = useLocation();
 
   const id = params.pathname.substr(6, 7);
+  const pathurl = `/users/${id}`;
 
   useEffect(() => {
     async function loadUser() {
-      const response = await api.get(`/users/${id}`);
+      const response = await api.get(pathurl);
       setUser(response.data);
+      setStatus(response.status);
     }
     loadUser();
-  }, []);
+    showToastStatus(status);
+  }, [status, user]);
 
   function handleSubmit(data) {
     async function saveUser() {
-      const response = await api.put(`/users/${id}`, { body: data });
-
-      console.log(response);
-
+      const response = await api.put(pathurl, { body: data });
       setUser(response.data);
+      setStatus(response.status);
     }
     saveUser();
+    showToastStatus(status);
   }
 
   return (
     <Container>
       <Form initialData={user} onSubmit={handleSubmit}>
         <HeaderUser>
-          <h1>Formulário de Edição do Usuário</h1>
+          <h1>Formulário de Edição do Usuário: {user.name}</h1>
 
           <Link to="/">
             <div>
@@ -52,6 +69,10 @@ export default function User() {
         </HeaderUser>
 
         <UserForm>
+          <label>Id:</label>
+          <Input type="text" name="id" id="id" readOnly />
+          <label>Nome Completo:</label>
+          <Input type="text" name="name" id="name" />
           <label>Login:</label>
           <Input type="text" name="username" id="username" />
           <label>E-mail:</label>
