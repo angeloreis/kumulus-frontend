@@ -7,16 +7,12 @@ import './config/ReactotronConfig';
 import Routes from './routes';
 import GlobalStyle from './styles/global';
 
-import store from './store';
-
 function App() {
   return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <Routes />
-        <GlobalStyle />
-      </BrowserRouter>
-    </Provider>
+    <BrowserRouter>
+      <Routes />
+      <GlobalStyle />
+    </BrowserRouter>
   );
 }
 
