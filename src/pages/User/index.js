@@ -29,13 +29,13 @@ export default function User() {
     }
   }
 
-  const params = useLocation();
-
-  const id = params.pathname.substr(6, 7);
-  const pathurl = `/users/${id}`;
-
   useEffect(() => {
     async function loadUser() {
+      const params = useLocation();
+
+      const id = params.pathname.substr(6, 7);
+      const pathurl = `/users/${id}`;
+
       const response = await api.get(pathurl);
       setUser(response.data);
       setStatus(response.status);
