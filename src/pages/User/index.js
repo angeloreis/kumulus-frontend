@@ -46,6 +46,7 @@ export default function User() {
 
   function handleSubmit(data) {
     async function saveUser() {
+      const params = useLocation();
       const id = params.pathname.substr(6, 7);
       const pathurl = `/users/${id}`;
       const response = await api.put(pathurl, { body: data });
