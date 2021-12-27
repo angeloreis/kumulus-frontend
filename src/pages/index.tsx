@@ -15,7 +15,7 @@ export default function Home({ users }: HomeProps) {
   const toast = useToast();
   const [usersData, setUsersData] = useState<userResponse[]>([] as userResponse[]);
 
-  useEffect(()=> setUsersData(users),[users])
+  useEffect(() => setUsersData(users),[users])
 
   async function handleDeleteUser(id) {
     const response = await api.delete(`/users/${id}`);
