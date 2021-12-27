@@ -1,0 +1,20 @@
+name: ci
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout Rpository'
+      uses: actions/checkout@v2
+
+    - name: 'Setup Node to v14.x'
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14.x
+
+    - name: 'Install dependencies'
+      run: yarn install
+
+    - name: 'Build app'
+      run: yarn build
