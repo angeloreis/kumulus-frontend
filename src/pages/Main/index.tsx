@@ -55,7 +55,7 @@ export function Main() {
             <Flex alignItems='center' alignContent='space-between' justify='space-between'>
               <Text fontSize='2xl'>{user.name}</Text>
               <div>
-                <Link href={`/form/user/${String(user.id)}`} pr='5'>Detalhes</Link>
+                <Link href={`/form/${String(user.id)}`} pr='5'>Detalhes</Link>
                 <Button
                  bg='red.400'
                  color='white'

@@ -14,7 +14,7 @@ export interface userResponse {
     name: string,
     username: string,
     email: string,
-    address: addressUser,
+    address?: addressUser,
     phone: string,
     website: string,
     company: {

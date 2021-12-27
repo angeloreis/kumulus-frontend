@@ -11,7 +11,7 @@ export function showToastStatus(code, toast) {
     if (code == '404') {
         toast({
           title: 'Falha na Requisição',
-          description: 'Sua requisição não foi concluída com sucesso!',
+          description: 'Sua requisição não foi concluída!',
           status: 'warning',
           duration: 9000,
           isClosable: true})
