@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
-
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
+
 import { FaHome, FaCheckSquare } from 'react-icons/fa';
 
 import { useToast, FormControl, Heading, Flex, Button, SimpleGrid, Icon } from '@chakra-ui/react';
@@ -11,40 +12,30 @@ import { Input } from '../../components/Form/Input'
 
 import { api } from '../../services/api';
 
-export default function User() {
+interface UserProps {
+  user: userResponse;
+}
+
+export default function User({ user }: UserProps) {
   const toast = useToast()
   const router = useRouter();
+  
 
-  const [user, setUser] = useState<userResponse>({} as userResponse);
-
-
+  const [userData, setUserData] = useState<userResponse>(user);
 
   function handleSubmit(data) {
-    const id = router.query.id;
     async function saveUser() {
-      const response = await api.put(`/users/${id}`, { body: data });
-      setUser(response.data);
+      const response = await api.put(`/users/${user.id}`, { body: data });
+      setUserData(response.data);
       showToastStatus(response.status, toast);
     }
     saveUser();
   }
 
-  useEffect(() => {
-    async function loadUser() {
-      if (router.query.id !== 'undefined') {
-        const response = await api.get(`/users/${router.query.id}`);
-        setUser(response.data);
-        showToastStatus(response.status, toast);
-      }
-    }
-    loadUser();
-  }, []);
-
-  if (user) {
     return (
       <Flex direction='column'>
         <Heading mx='20' my='10' py='5' px='10' >
-          Formulário de Edição do Usuário: {user.name}
+          Formulário de Edição do Usuário: {user?.name}
         </Heading>
         <SimpleGrid bg='white' color='gray.900' mx='20' my='10' py='5' px='10' borderRadius={5}>
           <FormControl onSubmit={handleSubmit}>
@@ -56,27 +47,27 @@ export default function User() {
             </Link>
 
 
-            <Input label='id' type="text" name="id" id="id" value={user.id} />
+            <Input label='id' type="text" name="id" id="id" value={user?.id} />
 
-            <Input label='Nome' type="text" name="name" id="name" value={user.name} />
+            <Input label='Nome' type="text" name="name" id="name" value={user?.name} />
 
-            <Input label='Usuário' type="text" name="username" id="username" value={user.username} />
-
-
-            <Input label='E-mail' type="email" name="email" id="email" value={user.email} />
-
-            <Input label='Telefone' type="text" name="phone" id="phone" value={user.phone} />
-
-            <Input label='Site' type="text" name="website" id="website" value={user.website} />
+            <Input label='Usuário' type="text" name="username" id="username" value={user?.username} />
 
 
-            <Input label='Endereço' type="text" name="street" id="street" value={user.address?.street || ''} />
+            <Input label='E-mail' type="email" name="email" id="email" value={user?.email} />
 
-            <Input label='Complemento' type="text" name="suite" id="suite" value={user.address?.suite || ''} />
+            <Input label='Telefone' type="text" name="phone" id="phone" value={user?.phone} />
 
-            <Input label='Cidade' type="text" name="city" id="city" value={user.address?.city || ''} />
+            <Input label='Site' type="text" name="website" id="website" value={user?.website} />
 
-            <Input label='Cep' type="text" name="zipcode" id="zipcode" value={user.address?.zipcode || ''} />
+
+            <Input label='Endereço' type="text" name="street" id="street" value={user?.address?.street || ''} />
+
+            <Input label='Complemento' type="text" name="suite" id="suite" value={user?.address?.suite || ''} />
+
+            <Input label='Cidade' type="text" name="city" id="city" value={user?.address?.city || ''} />
+
+            <Input label='Cep' type="text" name="zipcode" id="zipcode" value={user?.address?.zipcode || ''} />
 
             <Flex justifyContent='space-between' alignContent='center' py='5' color='white'>
               <Button bg='red.400' leftIcon={<Icon as={FaHome} />} _hover={{ bg: 'red.600' }}>
@@ -93,6 +84,14 @@ export default function User() {
         </SimpleGrid>
       </Flex>
     )
-  }
+  
 }
 
+export const getServerSideProps: GetServerSideProps = async ({ req, params }) => {
+  const { id } = params;
+  const response = await api.get(`/users/${id}`);
+  const user = response.data
+  return { 
+      props: { user }
+  }
+}
