@@ -31,6 +31,7 @@ export default function Home({ users }: HomeProps) {
 
   return (
     <Flex direction='column' h='100vh'>
+      <title>Lista de usuários</title>
       <Flex
     direction='column'
     bg='white'
