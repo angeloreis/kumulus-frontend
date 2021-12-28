@@ -56,10 +56,10 @@ export default function User({ user }: UserProps) {
 
   return (
     <Flex direction='column'>
-      
+      <title>Formulário de Edição do Usuário</title>
       <SimpleGrid bg='white' color='gray.900' mx='20' my='10' py='5' px='10' borderRadius={5}>
       <Heading mx='20' my='10' py='5' px='10' >
-        Formulário de Edição do Usuário: {userData.name}
+        Formulário de Edição do Usuário
       </Heading>
         <form onSubmit={onSubmit}>
           <Input label='id' type="text" name="id" id="id" value={userData.id} onChange={onChangeValueField} />
